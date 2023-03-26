@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "db:init": "npx prisma migrate dev --name init",
     "lint": "eslint src --fix --ext .ts,.tsx,.js,.jsx",
     "prettier": "prettier --write ."
   },

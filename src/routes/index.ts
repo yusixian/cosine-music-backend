@@ -25,7 +25,6 @@ const routerConf: Array<RouterConf> = [];
 function routes(app: Express) {
   // 根目录
   app.get('/', async (req: Request, res: Response) => {
-    // commonRes(res, { word: 'Hello Shinp!!!' }); // 成功
     const [e, result] = await silentHandle(getInfo);
     e ? commonRes.error(res, null) : commonRes(res, { result });
   });
