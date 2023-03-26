@@ -1,0 +1,43 @@
+{
+  "name": "cosine-music-backend",
+  "version": "1.0.0",
+  "description": "cosine-music 的后端，计划使用express + prisma试水",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "lint": "eslint src --fix --ext .ts,.tsx,.js,.jsx",
+    "prettier": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusixian/cosine-music-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yusixian/cosine-music-backend/issues"
+  },
+  "homepage": "https://github.com/yusixian/cosine-music-backend#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.10",
+    "@types/pino": "^7.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.7",
+    "prisma": "^4.11.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.11.0",
+    "dayjs": "^1.11.7",
+    "express": "^4.18.2",
+    "pino": "^8.11.0",
+    "pino-pretty": "^10.0.0"
+  }
+}
