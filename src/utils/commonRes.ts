@@ -5,6 +5,11 @@ import { Response } from 'express';
 import { Code, codeType, CodeMessage } from '../constants/code';
 import logger from './logger';
 
+interface ResType {
+  code: number;
+  result: unknown;
+  message?: unknown;
+}
 interface ResOption {
   type?: codeType;
   status?: number;
@@ -12,7 +17,7 @@ interface ResOption {
 }
 
 // 默认成功响应
-function commonRes(res: Response, data: unknown, options?: ResOption) {
+function commonRes(res: Response, result: unknown, options?: ResOption) {
   options = Object.assign({ type: Code[2000] }, options || {}); // 默认 success
 
   const { type, status, message } = options;
@@ -20,13 +25,13 @@ function commonRes(res: Response, data: unknown, options?: ResOption) {
 
   if (resStatus === undefined) {
     // 根据状态设置状态码
-    resStatus = type === Code[200] ? 200 : 409;
+    resStatus = type === Code[2000] ? 200 : 409;
   }
 
   // 响应参数
-  const sendRes: { code: number; data: unknown; message?: unknown } = {
+  const sendRes: ResType = {
     code: Code[type as codeType],
-    data,
+    result,
   };
   // 响应描述
   message && (sendRes.message = message);
@@ -35,14 +40,14 @@ function commonRes(res: Response, data: unknown, options?: ResOption) {
 }
 
 // 错误响应
-commonRes.error = function (res: Response, data: unknown, message?: unknown, status?: number) {
+commonRes.error = function (res: Response, result: unknown, message?: unknown, status?: number) {
   logger.error(message || CodeMessage['error']);
-  this(res, data, { type: 'error', message: message || CodeMessage['error'], status: status || 409 });
+  this(res, result, { type: 'error', message: message || CodeMessage['error'], status: status || 409 });
 };
 
 // 无权限响应
-commonRes.denied = function (res: Response, data: unknown) {
-  this(res, data, { type: 'denied', message: CodeMessage['denied'], status: 401 });
+commonRes.denied = function (res: Response, result: unknown) {
+  this(res, result, { type: 'denied', message: CodeMessage['denied'], status: 401 });
 };
 
 export default commonRes;

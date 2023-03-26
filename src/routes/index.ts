@@ -28,6 +28,10 @@ function routes(app: Express) {
     const [e, result] = await silentHandle(getInfo);
     e ? commonRes.error(res, null) : commonRes(res, { result });
   });
+
+  app.post('/users/register', async (req: Request, res: Response) => {
+    commonRes(res, { result: 'sssssss' });
+  });
   routerConf.forEach((conf) => app.use(conf.path, conf.router));
 }
 
