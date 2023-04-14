@@ -1,12 +1,19 @@
 // user.controller.ts
-
-import { Request, Response } from 'express';
-import { createUser } from '../service/user.service';
+import { Response } from 'express';
 import commonRes from '../utils/commonRes';
 import silentHandle from '../utils/silentHandle';
+import { Prisma } from '@prisma/client';
+import { RequestBody } from '../types/request';
+import userService from '../service/user.service';
 
-export async function createUserHandler(req: Request, res: Response) {
-  const [e, user] = await silentHandle(createUser, req.body);
-
-  return e ? commonRes.error(res, null, e.message) : commonRes(res, user);
+class UserController {
+  /**
+   * @description: 注册函数
+   */
+  public async createUserHandler(req: RequestBody<Prisma.UserCreateInput>, res: Response) {
+    const [e, user] = await silentHandle(userService.createUser, req.body);
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, user);
+  }
 }
+const userController = new UserController();
+export default userController;

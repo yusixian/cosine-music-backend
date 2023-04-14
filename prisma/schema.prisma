@@ -17,7 +17,8 @@ model User {
   type      Int     @default(0) // 0: 普通用户 1: 管理员
   status    Int     @default(0) // 0: 正常 1: 封禁
   sex       Int?    @default(0) // 0: 未知 1: 男 2: 女
-  email     String? @unique
+  name      String?
+  email     String?
   avatar    String?
   city      String?
 }
