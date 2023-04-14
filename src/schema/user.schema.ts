@@ -16,4 +16,9 @@ export const createUserSchema = z.object({
   }),
 });
 
-export type CreateUserInput = Omit<z.TypeOf<typeof createUserSchema>, 'body.passwordConfirmation'>;
+export const loginSchema = z.object({
+  body: z.object({
+    user_name: z.string(),
+    password: z.string(),
+  }),
+});

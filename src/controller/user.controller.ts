@@ -1,19 +1,35 @@
 // user.controller.ts
+import { Prisma, User } from '@prisma/client';
 import { Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../constant';
+import userService from '../service/user.service';
+import { RequestBody } from '../types/request';
 import commonRes from '../utils/commonRes';
 import silentHandle from '../utils/silentHandle';
-import { Prisma } from '@prisma/client';
-import { RequestBody } from '../types/request';
-import userService from '../service/user.service';
 
 class UserController {
   /**
    * @description: 注册函数
    */
-  public async createUserHandler(req: RequestBody<Prisma.UserCreateInput>, res: Response) {
+  public async register(req: RequestBody<Prisma.UserCreateInput>, res: Response) {
     const [e, user] = await silentHandle(userService.createUser, req.body);
     return e ? commonRes.error(res, null, e.message) : commonRes(res, user);
   }
+  /**
+   * @description: 登录函数
+   */
+  public async login(req: RequestBody<User>, res: Response) {
+    const { password, ...user } = req.body; // exclude password
+    const [e, result] = await silentHandle(() => ({
+      token: jwt.sign(user, JWT_SECRET, { expiresIn: '1d' }),
+      sessionid: new Date().getTime(),
+      user,
+    }));
+
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, result, { message: '登录成功!' });
+  }
 }
+
 const userController = new UserController();
 export default userController;
