@@ -16,7 +16,6 @@ const routerConf: Array<RouterConf> = [];
 fs.readdirSync(__dirname).forEach((file) => {
   if (file !== 'index.ts') {
     const path = file.slice(0, -9); // user.route.ts
-    console.log(path);
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     routerConf.push({ path: `/${path}`, router: require(`./${file}`).default }); //
   }

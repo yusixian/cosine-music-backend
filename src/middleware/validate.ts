@@ -11,7 +11,6 @@ const validate = (schema: AnyZodObject) => (req: Request, res: Response, next: N
       query: req.query,
       params: req.params,
     });
-    console.log(schema);
     next();
   } catch (e: any) {
     return commonRes.error(res, null, e.errors);
