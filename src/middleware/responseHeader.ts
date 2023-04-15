@@ -11,7 +11,7 @@ const responseHeader = (req: Request, res: Response, next: NextFunction) => {
   // 允许请求源
   res.header('Access-Control-Allow-Origin', allowOrigin);
   // 允许头部字段
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
   // 允许公开的头部字段
   res.header('Access-Control-Expose-Headers', 'Content-Disposition');
   // 允许的请求方式

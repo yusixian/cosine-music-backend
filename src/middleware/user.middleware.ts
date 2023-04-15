@@ -5,7 +5,8 @@ import { RequestBody } from '../types/request';
 import userService from '../service/user.service';
 import commonRes from '../utils/commonRes';
 import { UserLoginParam } from '../types/user.type';
-
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../constants';
 /**
  * @description: 密码加密
  */
@@ -46,4 +47,31 @@ export const verifyLogin = async (req: RequestBody<UserLoginParam>, res: Respons
     return;
   }
   next();
+};
+
+export const authVerify = (req: any, res: Response, next: NextFunction) => {
+  const auth = req.headers['authorization'];
+  console.log('header', req.headers);
+  const token = auth?.replace('Bearer ', '');
+  if (!auth) {
+    commonRes.error(res, null, '需要登录！');
+    return;
+  }
+  try {
+    // user中包含了payload的信息 User
+    const user = jwt.verify(token, JWT_SECRET);
+    console.log(user);
+    req.body.user = user;
+    next();
+  } catch (e) {
+    switch (e?.name) {
+      case 'TokenExpiredError':
+        commonRes.error(res, null, 'token已过期');
+        return;
+      case 'JsonWebTokenError':
+        commonRes.error(res, null, '无效token');
+        return;
+    }
+    commonRes.error(res, null, e.message);
+  }
 };

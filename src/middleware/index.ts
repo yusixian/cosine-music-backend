@@ -4,7 +4,7 @@ import responseHeader from './responseHeader';
 
 function initMiddleware(app: Express) {
   app.use(express.json());
-  app.use(responseHeader);
+  app.use(responseHeader); // cors
 }
 
 export default initMiddleware;

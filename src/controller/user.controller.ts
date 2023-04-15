@@ -2,7 +2,7 @@
 import { Prisma, User } from '@prisma/client';
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../constant';
+import { JWT_SECRET } from '../constants';
 import userService from '../service/user.service';
 import { RequestBody } from '../types/request';
 import commonRes from '../utils/commonRes';
@@ -28,6 +28,18 @@ class UserController {
     }));
 
     return e ? commonRes.error(res, null, e.message) : commonRes(res, result, { message: '登录成功!' });
+  }
+  /**
+   * @description: token授权后获取用户信息函数
+   */
+  public async getInfoByAuth(req: RequestBody<User> | Request, res: Response) {
+    // console.log('req', req);
+    const [e, result] = await silentHandle(() => {
+      const { user } = req.body;
+      return user;
+    });
+
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, result, { message: '获取用户信息成功!' });
   }
 }
 

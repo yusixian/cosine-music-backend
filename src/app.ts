@@ -5,6 +5,7 @@ import initMiddleware from './middleware';
 import routes from './routes'; // 路由
 import logger from './utils/logger';
 import path from 'path';
+
 const PORT = config.get<number>('port');
 
 const app = express();
