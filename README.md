@@ -16,6 +16,11 @@ yarn dev # 启动开发环境
 
 看到 `[当前时间] INFO: App is running at http://localhost:2333` 即可
 
+## 脚本说明
+
+- `db:init` 开发环境下，初始化数据库
+- `db:reset` 开发环境下，重置数据库数据，但保留表结构。 [Prisma Migrate in development and production](https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production#reset-the-development-database)
+
 ## 🍦 TODO
 
 项目 TODO

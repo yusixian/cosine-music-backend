@@ -11,14 +11,16 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  user_name String  @unique
+  id        Int      @id @default(autoincrement())
+  user_name String   @unique
   password  String
-  type      Int     @default(0) // 0: 普通用户 1: 管理员
-  status    Int     @default(0) // 0: 正常 1: 封禁
-  sex       Int?    @default(0) // 0: 未知 1: 男 2: 女
+  type      Int      @default(0) // 0: 普通用户 1: 管理员
+  status    Int      @default(0) // 0: 正常 1: 封禁
+  sex       Int?     @default(0) // 0: 未知 1: 男 2: 女
   name      String?
   email     String?
   avatar    String?
   city      String?
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
