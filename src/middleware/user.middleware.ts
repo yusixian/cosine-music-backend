@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { NextFunction, Response } from 'express';
 import { RequestBody } from '../types/request';
@@ -7,10 +7,11 @@ import commonRes from '../utils/commonRes';
 import { UserLoginParam } from '../types/user.type';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../constants';
+import logger from '../utils/logger';
 /**
  * @description: 密码加密
  */
-export const cryptPassword = (req: RequestBody<Prisma.UserCreateInput>, res: Response, next: NextFunction) => {
+export const cryptPassword = async (req: RequestBody<Prisma.UserCreateInput>, res: Response, next: NextFunction) => {
   const { password } = req.body;
   const salt = bcrypt.genSaltSync(10);
   // hash保存的是密文
@@ -49,9 +50,11 @@ export const verifyLogin = async (req: RequestBody<UserLoginParam>, res: Respons
   next();
 };
 
-export const authVerify = (req: any, res: Response, next: NextFunction) => {
+/**
+ * @description: 验证是否为用户
+ */
+export const authVerify = async (req: any, res: Response, next: NextFunction) => {
   const auth = req.headers['authorization'];
-  console.log('header', req.headers);
   const token = auth?.replace('Bearer ', '');
   if (!auth) {
     commonRes.error(res, null, '需要登录！');
@@ -60,10 +63,43 @@ export const authVerify = (req: any, res: Response, next: NextFunction) => {
   try {
     // user中包含了payload的信息 User
     const user = jwt.verify(token, JWT_SECRET);
-    console.log(user);
+    logger.info('authVerify user', user);
     req.body.user = user;
     next();
-  } catch (e) {
+  } catch (e: any) {
+    switch (e?.name) {
+      case 'TokenExpiredError':
+        commonRes.error(res, null, 'token已过期');
+        return;
+      case 'JsonWebTokenError':
+        commonRes.error(res, null, '无效token');
+        return;
+    }
+    commonRes.error(res, null, e.message);
+  }
+};
+
+/**
+ * @description: 判断是否是管理员
+ */
+export const adminVerify = async (req: any, res: Response, next: NextFunction) => {
+  const auth = req.headers['authorization'];
+  const token = auth?.replace('Bearer ', '');
+  if (!auth) {
+    commonRes.error(res, null, '需要登录！');
+    return;
+  }
+  try {
+    // user中包含了payload的信息 User
+    const user = jwt.verify(token, JWT_SECRET) as User;
+    const { type } = user ?? {};
+    if (type !== 1) {
+      commonRes.error(res, null, '需要管理员权限！');
+      return;
+    }
+    req.body.user = user;
+    next();
+  } catch (e: any) {
     switch (e?.name) {
       case 'TokenExpiredError':
         commonRes.error(res, null, 'token已过期');

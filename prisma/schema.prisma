@@ -32,6 +32,7 @@ model User {
 model Music {
   id            Int        @id @default(autoincrement())
   title         String // 音乐标题			
+  description   String? // 音乐描述
   coverUrl      String? // 封面图片路径		
   url           String // 歌曲资源路径	
   playCount     BigInt     @default(0) // 播放量	

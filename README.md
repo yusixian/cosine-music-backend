@@ -16,6 +16,15 @@ yarn dev # 启动开发环境
 
 看到 `[当前时间] INFO: App is running at http://localhost:2333` 即可
 
+有 pm2 的话，`yarn dev` 换成 `yarn start` 启动之后就可以进行以下操作
+
+- `pm2 start app1` 启动
+- `pm2 start app1 --watch` 启动，并当当前目录或其子目录中的文件被修改时，自动重启
+- `pm2 log app1` 查看日志
+- `pm2 restart app1` 重启
+- `pm2 stop app1` 停止
+- `pm2 list` 查看
+
 ## 脚本说明
 
 - `db:init` 开发环境下，初始化数据库
