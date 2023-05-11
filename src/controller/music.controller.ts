@@ -58,8 +58,14 @@ class MusicController {
    * @description: 分页查询音乐列表
    */
   public async getMusicList(req: Request, res: Response) {
-    const { pageNum = 1, pageSize = 10 } = req.query;
-    const [e, musicList] = await silentHandle(musicService.getMusicList, pageNum, pageSize);
+    const { pageNum = '1', pageSize = '10', orderBy = 'id', order = 'asc' } = req.query;
+    const [e, musicList] = await silentHandle(
+      musicService.getMusicList,
+      parseInt(pageNum as string),
+      parseInt(pageSize as string),
+      orderBy as string,
+      order as string,
+    );
     return e ? commonRes.error(res, null, e.message) : commonRes(res, musicList);
   }
 }

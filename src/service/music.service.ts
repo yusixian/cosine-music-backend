@@ -1,5 +1,6 @@
 import { Music, Prisma, PrismaClient } from '@prisma/client';
 import logger from '../utils/logger';
+import { Order, PaginatedData } from '../constants/type';
 
 // music.service.ts
 const prisma = new PrismaClient();
@@ -45,13 +46,27 @@ class MusicService {
    * @param pageSize default 10
    * @returns Promise<Music[]>
    */
-  async getMusicList(pageNum: number, pageSize: number): Promise<Music[]> {
+  async getMusicList(pageNum: number, pageSize: number, orderBy: string, order: Order): Promise<PaginatedData<Music>> {
     const skip = (pageNum - 1) * pageSize;
     const take = pageSize;
-    return await prisma.music.findMany({
+
+    const orderByOption = {
+      [orderBy]: order,
+    } as Prisma.MusicOrderByWithAggregationInput;
+
+    const list = await prisma.music.findMany({
       skip,
       take,
+      orderBy: orderByOption,
     });
+    const total = await prisma.music.count();
+    return {
+      list,
+      total: total,
+      totalPages: Math.ceil(total / pageSize),
+      pageNum,
+      pageSize,
+    };
   }
 }
 const musicService = new MusicService();
