@@ -8,5 +8,9 @@ const router = Router();
 
 router.post('/upload/file', adminVerify, upload.single('file'), musicController.uploadFile);
 router.post('/create', adminVerify, validate(createMusicSchema), musicController.createMusic);
+router.delete('/delete/:id', adminVerify, musicController.deleteMusic);
+router.put('/update/:id', adminVerify, musicController.updateMusic);
+router.get('/detail/:id', adminVerify, musicController.getMusicById);
+router.get('/all', adminVerify, musicController.getMusicList);
 
 export default router;
