@@ -3,3 +3,17 @@
 import z from 'zod';
 
 // 创建接口
+export const createMusicSchema = z.object({
+  body: z.object({
+    id: z.number().nullable().optional(),
+    title: z.string({ required_error: '缺少音乐标题' }).nonempty(),
+    description: z.string().optional(),
+    coverUrl: z.string().optional(),
+    url: z.string({ required_error: '缺少歌曲资源路径' }).nonempty(),
+    foreignArtist: z.string().optional(),
+    artistId: z.number().optional(),
+    lyric: z.string().optional(),
+    lyricAuthorId: z.number().optional(),
+    tags: z.array(z.string()).optional(),
+  }),
+});

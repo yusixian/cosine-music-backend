@@ -33,7 +33,6 @@ class UserController {
    * @description: token授权后获取用户信息函数
    */
   public async getInfoByAuth(req: any, res: Response) {
-    // console.log('req', req);
     const [e, result] = await silentHandle(() => {
       const { user } = req.body;
       return user;

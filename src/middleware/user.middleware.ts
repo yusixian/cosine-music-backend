@@ -97,7 +97,7 @@ export const adminVerify = async (req: any, res: Response, next: NextFunction) =
       commonRes.error(res, null, '需要管理员权限！');
       return;
     }
-    req.body.user = user;
+    req.user = user;
     next();
   } catch (e: any) {
     switch (e?.name) {

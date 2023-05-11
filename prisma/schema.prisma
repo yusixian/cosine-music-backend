@@ -35,13 +35,13 @@ model Music {
   description   String? // 音乐描述
   coverUrl      String? // 封面图片路径		
   url           String // 歌曲资源路径	
-  playCount     BigInt     @default(0) // 播放量	
+  playCount     Int        @default(0) // 播放量	
   // 歌手
   foreignArtist String? // 不在本平台的歌手名称
   artist        User?      @relation("UploadMusics", fields: [artistId], references: [id])
   artistId      Int? // 歌手id
   // 歌词
-  lyric         String? // lrc格式歌词	
+  lyric         String     @db.Text // lrc格式歌词	
   lyricAuthor   User?      @relation("LyricAuthors", fields: [lyricAuthorId], references: [id])
   lyricAuthorId Int? // 歌词贡献者id
   status        Int        @default(0) // 0:未审核 1:正常 2:封禁
