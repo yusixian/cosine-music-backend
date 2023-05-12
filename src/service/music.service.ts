@@ -34,6 +34,28 @@ class MusicService {
     });
   }
 
+  async updateMusicStatus(musicIds: number[], status: number) {
+    await prisma.music.updateMany({
+      where: {
+        id: {
+          in: musicIds,
+        },
+      },
+      data: {
+        status,
+      },
+    });
+    logger.info('updateMusicStatus', { musicIds, status });
+  }
+
+  async incMusicPlayCount(id: number) {
+    await prisma.music.update({
+      where: { id },
+      data: { playCount: { increment: 1 } },
+    });
+    return;
+  }
+
   async deleteMusicById(id: number): Promise<Music> {
     return await prisma.music.delete({
       where: { id },

@@ -46,6 +46,24 @@ class MusicController {
   }
 
   /**
+   * @description: 批量更新音乐审核状态
+   */
+  public async updateMusicStatus(req: Request, res: Response) {
+    const { musicIds, status } = req.body;
+    const [e, updatedMusics] = await silentHandle(musicService.updateMusicStatus, musicIds, status);
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, updatedMusics, { message: '更新音乐审核状态成功!' });
+  }
+
+  /**
+   * @description: 播放音乐时更新播放量等
+   */
+  public async playMusic(req: Request, res: Response) {
+    const id = req.params.id;
+    const [e, updatedMusics] = await silentHandle(musicService.incMusicPlayCount, parseInt(id));
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, updatedMusics, { message: '播放量增长成功!' });
+  }
+
+  /**
    * @description: 根据ID查询音乐信息
    */
   public async getMusicById(req: Request, res: Response) {
