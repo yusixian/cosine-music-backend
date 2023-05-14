@@ -6,6 +6,7 @@ import { RequestBody } from '../types/request';
 import commonRes from '../utils/commonRes';
 import { upToQiniu } from '../utils/oss';
 import silentHandle from '../utils/silentHandle';
+import { Order } from '../constants/type';
 
 class MusicController {
   /**
@@ -41,8 +42,10 @@ class MusicController {
    */
   public async updateMusic(req: Request, res: Response) {
     const id = req.params.id;
-    const [e, updatedMusic] = await silentHandle(musicService.updateMusicById, id, req.body);
-    return e ? commonRes.error(res, null, e.message) : commonRes(res, updatedMusic, { message: '更新成功!' });
+    const [e, updatedMusic] = await silentHandle(() => {
+      musicService.updateMusicById(parseInt(id), req.body);
+    });
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, updatedMusic, { message: '更新音乐信息成功!' });
   }
 
   /**
@@ -68,8 +71,10 @@ class MusicController {
    */
   public async getMusicById(req: Request, res: Response) {
     const id = req.params.id;
-    const [e, music] = await silentHandle(musicService.getMusicById, id);
-    return e ? commonRes.error(res, null, e.message) : commonRes(res, music);
+    const [e, music] = await silentHandle(() => {
+      return musicService.getMusicById(parseInt(id));
+    });
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, music, { message: '获取音乐详情成功!' });
   }
 
   /**
@@ -84,6 +89,24 @@ class MusicController {
       orderBy as string,
       order as string,
     );
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, musicList);
+  }
+
+  /**
+   * @description: 分页查询音乐列表（前台）
+   */
+  public async getMusicListPublic(req: Request, res: Response) {
+    const { pageNum = '1', pageSize = '10', orderBy = 'id', order = 'asc' } = req.query;
+    const [e, musicList] = await silentHandle(() => {
+      const whereOpt: Prisma.MusicWhereInput = { status: 1, deletedAt: null };
+      return musicService.getMusicList(
+        parseInt(pageNum as string),
+        parseInt(pageSize as string),
+        orderBy as string,
+        order as Order,
+        whereOpt,
+      );
+    });
     return e ? commonRes.error(res, null, e.message) : commonRes(res, musicList);
   }
 }

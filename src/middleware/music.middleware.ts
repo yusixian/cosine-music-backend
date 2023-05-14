@@ -5,7 +5,7 @@ import commonRes from '../utils/commonRes';
 import musicService from '../service/music.service';
 
 /**
- * @description: 验证注册用户唯一性
+ * @description: 验证音乐为公开的
  */
 export const validatePublicMusic = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;

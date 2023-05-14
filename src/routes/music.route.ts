@@ -15,5 +15,6 @@ router.put('/audit', adminVerify, musicController.updateMusicStatus);
 router.put('/play/:id', authVerify, validatePublicMusic, musicController.playMusic);
 router.get('/detail/:id', adminVerify, musicController.getMusicById);
 router.get('/all', adminVerify, musicController.getMusicList);
+router.get('/all/public', musicController.getMusicListPublic);
 
 export default router;

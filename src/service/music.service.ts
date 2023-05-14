@@ -68,7 +68,13 @@ class MusicService {
    * @param pageSize default 10
    * @returns Promise<Music[]>
    */
-  async getMusicList(pageNum: number, pageSize: number, orderBy: string, order: Order): Promise<PaginatedData<Music>> {
+  async getMusicList(
+    pageNum: number,
+    pageSize: number,
+    orderBy: string,
+    order: Order,
+    whereOpt?: Prisma.MusicWhereInput,
+  ): Promise<PaginatedData<Music>> {
     const skip = (pageNum - 1) * pageSize;
     const take = pageSize;
 
@@ -77,6 +83,7 @@ class MusicService {
     } as Prisma.MusicOrderByWithAggregationInput;
 
     const list = await prisma.music.findMany({
+      where: whereOpt,
       skip,
       take,
       orderBy: orderByOption,
