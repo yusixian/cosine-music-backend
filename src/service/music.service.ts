@@ -61,6 +61,35 @@ class MusicService {
       where: { id },
     });
   }
+
+  /**
+   * 通过id数组批量删除音乐
+   * @param musicIds number[] id数组
+   * @param force boolean 为true则为硬删除，否则为软删除，将deletedAt设置为当前时间
+   */
+  async deleteBatchMusicById(musicIds: number[], force?: boolean) {
+    const now = new Date();
+    const res = force
+      ? await prisma.music.deleteMany({
+          where: {
+            id: {
+              in: musicIds,
+            },
+          },
+        })
+      : await prisma.music.updateMany({
+          where: {
+            id: {
+              in: musicIds,
+            },
+          },
+          data: {
+            deletedAt: now,
+          },
+        });
+    logger.info('deleteBatchMusicById', { musicIds, force, res });
+  }
+
   /**
    * Prisma 分页查询
    * https://www.prisma.io/docs/concepts/components/prisma-client/pagination

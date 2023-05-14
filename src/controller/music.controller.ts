@@ -28,12 +28,22 @@ class MusicController {
     const [e, music] = await silentHandle(musicService.createMusic, req.body);
     return e ? commonRes.error(res, null, e.message) : commonRes(res, music);
   }
+
   /**
    * @description: 根据ID删除音乐
    */
   public async deleteMusic(req: Request, res: Response) {
     const id = req.params.id;
     const [e, deletedMusic] = await silentHandle(musicService.deleteMusicById, id);
+    return e ? commonRes.error(res, null, e.message) : commonRes(res, deletedMusic, { message: '删除成功!' });
+  }
+
+  /**
+   * @description: 根据ID批量删除音乐
+   */
+  public async deleteBatchMusic(req: Request, res: Response) {
+    const { musicIds, force } = req.body;
+    const [e, deletedMusic] = await silentHandle(musicService.deleteBatchMusicById, musicIds, force);
     return e ? commonRes.error(res, null, e.message) : commonRes(res, deletedMusic, { message: '删除成功!' });
   }
 

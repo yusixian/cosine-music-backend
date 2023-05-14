@@ -9,7 +9,8 @@ const router = Router();
 
 router.post('/upload/file', adminVerify, upload.single('file'), musicController.uploadFile);
 router.post('/create', adminVerify, validate(createMusicSchema), musicController.createMusic);
-router.delete('/delete/:id', adminVerify, musicController.deleteMusic);
+// router.delete('/delete/:id', adminVerify, musicController.deleteMusic);
+router.post('/batch/delete', adminVerify, musicController.deleteBatchMusic);
 router.put('/update/:id', adminVerify, musicController.updateMusic);
 router.put('/audit', adminVerify, musicController.updateMusicStatus);
 router.put('/play/:id', authVerify, validatePublicMusic, musicController.playMusic);
