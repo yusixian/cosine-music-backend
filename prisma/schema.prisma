@@ -30,71 +30,52 @@ model User {
 }
 
 model Music {
-  id            Int        @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   title         String // 音乐标题			
   description   String? // 音乐描述
   coverUrl      String? // 封面图片路径		
   url           String // 歌曲资源路径	
-  playCount     Int        @default(0) // 播放量	
+  playCount     Int       @default(0) // 播放量	
   // 歌手
   foreignArtist String? // 不在本平台的歌手名称
-  artist        User?      @relation("UploadMusics", fields: [artistId], references: [id])
+  artist        User?     @relation("UploadMusics", fields: [artistId], references: [id])
   artistId      Int? // 歌手id
   // 歌词
-  lyric         String     @db.Text // lrc格式歌词	
-  lyricAuthor   User?      @relation("LyricAuthors", fields: [lyricAuthorId], references: [id])
+  lyric         String    @db.Text // lrc格式歌词	
+  lyricAuthor   User?     @relation("LyricAuthors", fields: [lyricAuthorId], references: [id])
   lyricAuthorId Int? // 歌词贡献者id
-  status        Int        @default(0) // 0:未审核 1:正常 2:封禁
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime?  @updatedAt
+  status        Int       @default(0) // 0:未审核 1:正常 2:封禁
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
   deletedAt     DateTime?
   // 多对多关系
-  tags          MusicTag[] @relation("MusicTag") // Music 对 Tag
+  tags          Tag[]
 }
 
 model Tag {
-  id        Int           @id @default(autoincrement())
-  name      String // 标签名称
+  id        Int        @id @default(autoincrement())
+  name      String     @unique // 标签名称
   icon      String? // 标签图标
-  createdAt DateTime      @default(now())
-  updatedAt DateTime?     @updatedAt
+  color     String? // 标签颜色
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt
   // 多对多
-  musics    MusicTag[]    @relation("MusicTag") // Music 对 Tag
-  playlists PlayListTag[] @relation("PlayListTags") // Music 对 Tag
-}
-
-model MusicTag {
-  music   Music @relation("MusicTag", fields: [musicId], references: [id])
-  musicId Int
-  tag     Tag   @relation("MusicTag", fields: [tagId], references: [id])
-  tagId   Int
-
-  // 音乐和标签，一个音乐可以有 N 个标签，一个标签可以被 N 个音乐同时拥有 ✅ 2023-05-05
-  @@id([musicId, tagId])
+  musics    Music[]
+  playlists Playlist[]
 }
 
 model Playlist {
-  id          Int           @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String // 歌单标题
   description String? // 歌单描述
   coverUrl    String? // 歌单封面
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime?     @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
-  creator     User          @relation("CreatePlayLists", fields: [creatorId], references: [id])
+  creator     User      @relation("CreatePlayLists", fields: [creatorId], references: [id])
   creatorId   Int // 创建者id 
   // 多对多
-  tags        PlayListTag[] @relation("PlayListTags") // Music 对 Tag
-}
-
-model PlayListTag {
-  playlist   Playlist @relation("PlayListTags", fields: [playlistId], references: [id])
-  playlistId Int
-  tag        Tag      @relation("PlayListTags", fields: [tagId], references: [id])
-  tagId      Int
-
-  // 歌单和标签，一个歌单可以有 N 个标签，一个标签可以被 N 个歌单同时拥有 ✅ 2023-05-05
-  @@id([playlistId, tagId])
+  tags        Tag[]
 }
 
 model Category {

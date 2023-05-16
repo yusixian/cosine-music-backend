@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Tag` ADD COLUMN `color` VARCHAR(191) NULL;
