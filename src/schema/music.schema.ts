@@ -17,3 +17,13 @@ export const createMusicSchema = z.object({
     tags: z.array(z.string()).optional(),
   }),
 });
+
+export const getMusicListSchema = z.object({
+  query: z.object({
+    pageNum: z.string().default('1'),
+    pageSize: z.string().default('10'),
+    orderBy: z.string().default('id'),
+    order: z.string().default('asc'),
+    tagNames: z.array(z.string()).optional(),
+  }),
+});

@@ -114,9 +114,20 @@ class MusicController {
    * @description: 分页查询音乐列表（前台）
    */
   public async getMusicListPublic(req: Request, res: Response) {
-    const { pageNum = '1', pageSize = '10', orderBy = 'id', order = 'asc' } = req.query;
+    const { pageNum = '1', pageSize = '10', orderBy = 'id', order = 'asc', tagNames } = req.query;
     const [e, musicList] = await silentHandle(() => {
-      const whereOpt: Prisma.MusicWhereInput = { status: 1, deletedAt: null };
+      const tagsArgs: Prisma.TagListRelationFilter = {
+        some: tagNames
+          ? {
+              name: { in: tagNames as string[] },
+            }
+          : {},
+      } as Prisma.TagListRelationFilter;
+      const whereOpt: Prisma.MusicWhereInput = {
+        status: 1,
+        deletedAt: null,
+        tags: tagsArgs,
+      };
       return musicService.getMusicList(
         parseInt(pageNum as string),
         parseInt(pageSize as string),
