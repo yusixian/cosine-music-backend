@@ -78,7 +78,9 @@ class TagService {
       orderBy: orderByOption,
       include: { musics: true },
     });
-    const total = await prisma.tag.count();
+    const total = await prisma.tag.count({
+      where: whereOpt,
+    });
 
     logger.info('getTagList', { total, list, pageSize, pageNum });
     return {

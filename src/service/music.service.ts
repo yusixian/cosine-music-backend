@@ -118,7 +118,9 @@ class MusicService {
       orderBy: orderByOption,
       include: { tags: true },
     });
-    const total = await prisma.music.count();
+    const total = await prisma.music.count({
+      where: whereOpt,
+    });
     return {
       list,
       total: total,
