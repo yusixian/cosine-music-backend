@@ -53,13 +53,13 @@ class MusicController {
   public async updateMusic(req: Request, res: Response) {
     const id = req.params.id;
     const [e, updatedMusic] = await silentHandle(() => {
-      const { tags, ...rest } = req.body;
-      const tagsArgs = tags.map((tag: { name: string }) => ({ create: tag, where: { name: tag.name } }));
+      const { tagNames, ...rest } = req.body;
+      const tagsArgs = tagNames.map((tagName: string) => ({ name: tagName }));
       console.log({ tagsArgs });
       musicService.updateMusicById(parseInt(id), {
         ...rest,
         tags: {
-          connectOrCreate: tagsArgs,
+          set: tagsArgs,
         },
       });
     });
