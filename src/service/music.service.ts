@@ -24,10 +24,12 @@ class MusicService {
   async getMusicById(id: number): Promise<Music | null> {
     return await prisma.music.findUnique({
       where: { id },
+      include: { tags: true },
     });
   }
 
   async updateMusicById(id: number, data: Prisma.MusicUpdateInput): Promise<Music> {
+    logger.info('Updating music', id, data);
     return await prisma.music.update({
       where: { id },
       data,

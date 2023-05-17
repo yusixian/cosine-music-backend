@@ -53,7 +53,15 @@ class MusicController {
   public async updateMusic(req: Request, res: Response) {
     const id = req.params.id;
     const [e, updatedMusic] = await silentHandle(() => {
-      musicService.updateMusicById(parseInt(id), req.body);
+      const { tags, ...rest } = req.body;
+      const tagsArgs = tags.map((tag: { name: string }) => ({ create: tag, where: { name: tag.name } }));
+      console.log({ tagsArgs });
+      musicService.updateMusicById(parseInt(id), {
+        ...rest,
+        tags: {
+          connectOrCreate: tagsArgs,
+        },
+      });
     });
     return e ? commonRes.error(res, null, e.message) : commonRes(res, updatedMusic, { message: '更新音乐信息成功!' });
   }
