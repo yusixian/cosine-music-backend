@@ -98,3 +98,14 @@ model Reply {
   content   String // 回复内容
   createdAt DateTime @default(now())
 }
+
+model Banner {
+  id          Int       @id @default(autoincrement())
+  title       String // 轮播图标题	
+  description String? // 轮播图描述	
+  url         String // 轮播图片路径	
+  href        String? // 轮播图跳转链接
+  status      Int       @default(0) // 轮播图状态	0 正常，1 禁用
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+}
